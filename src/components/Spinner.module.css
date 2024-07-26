@@ -1,0 +1,77 @@
+.spinnerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.tile {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.tile:nth-child(1) {
+  transform: rotate(0deg) translate(80px);
+}
+.tile:nth-child(2) {
+  transform: rotate(45deg) translate(80px);
+}
+.tile:nth-child(3) {
+  transform: rotate(90deg) translate(80px);
+}
+.tile:nth-child(4) {
+  transform: rotate(135deg) translate(80px);
+}
+.tile:nth-child(5) {
+  transform: rotate(180deg) translate(80px);
+}
+.tile:nth-child(6) {
+  transform: rotate(225deg) translate(80px);
+}
+.tile:nth-child(7) {
+  transform: rotate(270deg) translate(80px);
+}
+.tile:nth-child(8) {
+  transform: rotate(315deg) translate(80px);
+}
+
+.selected {
+  background-color: #4caf50;
+  color: #fff;
+  transform: scale(1.2);
+  transition: transform 0.3s ease;
+}
+
+.spinner-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.spinner-button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
