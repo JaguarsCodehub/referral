@@ -50,21 +50,29 @@ const Spinner = ({ onComplete }) => {
         {tiles.map((points, index) => (
           <div
             key={index}
-            className={`${styles.tile} ${selectedTile === index ? styles.selected : ''
-              }`}
+            className={`${styles.tile} ${
+              selectedTile === index ? styles.selected : ''
+            }`}
+            style={{
+              transform: `rotate(${
+                (360 / tiles.length) * index
+              }deg) translate(80px)`,
+            }}
           >
             {points}
           </div>
         ))}
       </div>
-      <button
-        id='spinner-button'
-        className='bg-white text-black'
-        onClick={handleSpin}
-        disabled={spinning || spinCooldown}
-      >
-        {spinning ? 'Spinning...' : 'Spin'}
-      </button>
+      <div className='justify-center items-center'>
+        <button
+          id='spinner-button'
+          className='bg-purple-800 text-white p-2 rounded'
+          onClick={handleSpin}
+          disabled={spinning || spinCooldown}
+        >
+          {spinning ? 'Spinning...' : 'Spin Your Luck'}
+        </button>
+      </div>
     </div>
   );
 };

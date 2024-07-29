@@ -50,15 +50,21 @@ const Dashboard = () => {
         </div> */}
         <div className='px-4 md:px-24 py-6 mt-8'>
           <div className=''>
-            <p className='text-purple-500 text-2xl font-semibold'>Your referral link: {''}</p>
+            <p className='text-purple-500 text-2xl font-semibold'>
+              Your referral link: {''}
+            </p>
             <p className='  text-white  text-2xl'>{`http://localhost:3000/?ref=${referral_code}`}</p>
           </div>
-          <p className='text-purple-300'>Share this link with friends and earn referral points based on their joining status</p>
+          <p className='text-purple-300'>
+            Share this link with friends and earn referral points based on their
+            joining status
+          </p>
         </div>
         <div className='px-4 md:px-24'>
-          <h2 className='text-4xl text-white font-medium'>YOUR POINTS: {points}</h2>
+          <h2 className='text-4xl text-white font-medium'>
+            YOUR POINTS: {points}
+          </h2>
         </div>
-
 
         <Spinner onComplete={handleSpinComplete} />
       </div>

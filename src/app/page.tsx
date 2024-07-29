@@ -14,19 +14,22 @@ const Home = () => {
   const [error, setError] = useState('');
   const ref = searchParams.get('ref');
 
-
-
   return (
     <div>
       <Navbar />
-      <div className='flex h-screen items-center justify-center p-12 md:p-24'>
-        <Image className='' src={require('../../public/cat1.png')} alt='image' width={500} height={500} />
+      <div className='bg-black flex h-screen items-center justify-center p-12 md:p-24'>
+        <Image
+          className='hidden md:block'
+          src={require('../../public/cat1.png')}
+          alt='image'
+          width={500}
+          height={500}
+        />
         <div className='mt-20'>
           <CardWithForm />
         </div>
       </div>
     </div>
-
   );
 };
 
