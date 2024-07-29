@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
-  const { name, email, referred_by } = await req.json();
+  const { twitter_username, discord_username, referred_by } = await req.json();
 
   // Generate a unique referral code
   const referral_code = Math.random().toString(36).substring(2, 15);
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   // Insert the new user
   const { data, error } = await supabase
     .from('users')
-    .insert([{ name, email, referral_code, referred_by }])
+    .insert([{ twitter_username, discord_username, referral_code, referred_by }])
     .select()
     .single();
 

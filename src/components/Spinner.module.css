@@ -1,3 +1,4 @@
+/* Spinner.module.css */
 .spinnerContainer {
   display: flex;
   flex-direction: column;
@@ -15,6 +16,17 @@
   border-radius: 50%;
   position: relative;
   overflow: hidden;
+  animation: spin 3s ease-in-out;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .tile {
@@ -32,24 +44,31 @@
 .tile:nth-child(1) {
   transform: rotate(0deg) translate(80px);
 }
+
 .tile:nth-child(2) {
   transform: rotate(45deg) translate(80px);
 }
+
 .tile:nth-child(3) {
   transform: rotate(90deg) translate(80px);
 }
+
 .tile:nth-child(4) {
   transform: rotate(135deg) translate(80px);
 }
+
 .tile:nth-child(5) {
   transform: rotate(180deg) translate(80px);
 }
+
 .tile:nth-child(6) {
   transform: rotate(225deg) translate(80px);
 }
+
 .tile:nth-child(7) {
   transform: rotate(270deg) translate(80px);
 }
+
 .tile:nth-child(8) {
   transform: rotate(315deg) translate(80px);
 }
@@ -61,7 +80,7 @@
   transition: transform 0.3s ease;
 }
 
-.spinner-button {
+#spinner-button {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #0070f3;
@@ -71,7 +90,7 @@
   cursor: pointer;
 }
 
-.spinner-button:disabled {
+#spinner-button:disabled {
   background-color: #999;
   cursor: not-allowed;
 }

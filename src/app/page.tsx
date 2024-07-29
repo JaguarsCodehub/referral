@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { CardWithForm } from '@/components/card-form';
+import { Navbar } from '@/components/navbar';
+import Image from 'next/image';
 
 const Home = () => {
   const router = useRouter();
@@ -11,47 +14,19 @@ const Home = () => {
   const [error, setError] = useState('');
   const ref = searchParams.get('ref');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await fetch('/api/createUser', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, referred_by: ref }),
-    });
 
-    const data = await res.json();
-
-    if (res.ok) {
-      router.push(`/dashboard?referral_code=${data.referral_code}`);
-    } else {
-      setError(data.error);
-    }
-  };
 
   return (
-    <div className='flex p-24'>
-      <h1>Signup</h1>
-      {error && <p>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <input
-          type='text'
-          placeholder='Name'
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type='email'
-          placeholder='Email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type='submit'>Submit</button>
-      </form>
+    <div>
+      <Navbar />
+      <div className='flex h-screen items-center justify-center p-12 md:p-24'>
+        <Image className='' src={require('../../public/cat1.png')} alt='image' width={500} height={500} />
+        <div className='mt-20'>
+          <CardWithForm />
+        </div>
+      </div>
     </div>
+
   );
 };
 
