@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import styles from './Spinner.module.css'; // Import the CSS module
+import styles from './Spinner.module.css';
 
 const tiles = [10, 20, 30, 40, 50, 60, 70, 80];
 
-const Spinner = ({ onComplete }) => {
-  const [selectedTile, setSelectedTile] = useState(null);
-  const [spinning, setSpinning] = useState(false);
-  const [spinCooldown, setSpinCooldown] = useState(false);
+type SpinnerProps = {
+  onComplete: (points: number) => void;
+};
+
+const Spinner: React.FC<SpinnerProps> = ({ onComplete }) => {
+  const [selectedTile, setSelectedTile] = useState<number | null>(null);
+  const [spinning, setSpinning] = useState<boolean>(false);
+  const [spinCooldown, setSpinCooldown] = useState<boolean>(false);
 
   useEffect(() => {
     const lastSpinTime = localStorage.getItem('lastSpinTime');
@@ -50,13 +54,11 @@ const Spinner = ({ onComplete }) => {
         {tiles.map((points, index) => (
           <div
             key={index}
-            className={`${styles.tile} ${
-              selectedTile === index ? styles.selected : ''
-            }`}
+            className={`${styles.tile} ${selectedTile === index ? styles.selected : ''
+              }`}
             style={{
-              transform: `rotate(${
-                (360 / tiles.length) * index
-              }deg) translate(80px)`,
+              transform: `rotate(${(360 / tiles.length) * index
+                }deg) translate(80px)`,
             }}
           >
             {points}
