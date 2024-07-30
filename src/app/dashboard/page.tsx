@@ -47,7 +47,7 @@ const Dashboard = () => {
 
   const copyToClipboard = () => {
     if (referral_code) {
-      const referralLink = `http://localhost:3000/?ref=${referral_code}`;
+      const referralLink = `https://referral-eight.vercel.app/?ref=${referral_code}`;
       navigator.clipboard.writeText(referralLink)
         .then(() => setCopySuccess('Referral link copied!'))
         .catch(() => setCopySuccess('Failed to copy the link.'));
@@ -63,7 +63,7 @@ const Dashboard = () => {
             <p className='text-purple-500 text-2xl font-semibold'>
               Your referral link: {''}
             </p>
-            <p className='text-white  md:text-2xl'>{`http://localhost:3000/?ref=${referral_code}`}</p>
+            <p className='text-white  md:text-2xl'>{`https://referral-eight.vercel.app/?ref=${referral_code}`}</p>
           </div>
           <button
             className='mt-4 bg-purple-800 text-white p-2 rounded'
