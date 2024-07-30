@@ -1,7 +1,6 @@
 import { Montserrat } from 'next/font/google';
 import './globals.css';
-import { SessionProvider } from 'next-auth/react';
-import { Navbar } from '@/components/navbar';
+
 
 const inter = Montserrat({ subsets: ['latin'] });
 
