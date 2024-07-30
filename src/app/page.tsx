@@ -1,26 +1,19 @@
+// app/page.tsx or pages/index.tsx
 'use client';
-import { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { CardWithForm } from '@/components/card-form';
 import { Navbar } from '@/components/navbar';
 import Image from 'next/image';
-import { Suspense } from 'react';
+
+export const dynamic = 'force-dynamic';
 
 const Home = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
-  const ref = searchParams.get('ref');
-
   return (
     <div>
       <Navbar />
       <div className='bg-black flex h-screen items-center justify-center p-12 md:p-24'>
         <Image
           className='hidden md:block'
-          src={require('../../public/cat1.png')}
+          src='/cat1.png'
           alt='image'
           width={500}
           height={500}

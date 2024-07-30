@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react'
 import { useEffect, useState } from 'react';
 import Spinner from '@/components/Spinner';
@@ -9,8 +9,10 @@ import Image from 'next/image';
 import RunningString from '@/components/running-string';
 import DashboardCards from '@/components/dashboard-cards';
 
+export const dynamic = 'force-dynamic';
+
+
 const Dashboard = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const referral_code = searchParams.get('referral_code');
   const [points, setPoints] = useState(0);
