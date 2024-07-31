@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from('users')
-    .select('points')
+    .select('twitter_username, points')
     .order('points', { ascending: false });
 
   if (error) {
