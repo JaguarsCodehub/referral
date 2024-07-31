@@ -5,30 +5,30 @@ const RunningString = () => {
         <div className='runstring'>
             <p className='marquee'>
                 <span>
-                    {''}SPIN YOUR LUCK & EARN POINTS {''}
+                    {''}COMING SOON TO MONAD {''}
                 </span>
                 <span>
                     {' '}
-                    {''}SPIN YOUR LUCK & EARN POINTS  {''}
+                    {''}COMING SOON TO MONAD  {''}
                 </span>
                 <span>
                     {' '}
-                    {''}SPIN YOUR LUCK & EARN POINTS  {''}
+                    {''}COMING SOON TO MONAD  {''}
                 </span>
                 <span>
                     {' '}
-                    {''}SPIN YOUR LUCK & EARN POINTS  {''}
+                    {''}COMING SOON TO MONAD  {''}
                 </span>
             </p>
             <p className='marquee'>
                 <span>
-                    {''}SPIN YOUR LUCK & EARN POINTS  {''}
+                    {''}COMING SOON TO MONAD  {''}
                 </span>
-                <span> {''}SPIN YOUR LUCK & EARN POINTS </span>
-                <span> {''}SPIN YOUR LUCK & EARN POINTS </span>
+                <span> {''}COMING SOON TO MONAD </span>
+                <span> {''}COMING SOON TO MONAD </span>
                 <span>
                     {' '}
-                    {''}SPIN YOUR LUCK & EARN POINTS  {''}
+                    {''}COMING SOON TO MONAD  {''}
                 </span>
             </p>
         </div>

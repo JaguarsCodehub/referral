@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Spinner.module.css';
 
-const tiles = [10, 20, 30, 40, 50, 60, 70, 80];
+const tiles = [100, 200, 300, 500, 600, 700, 1000, 900];
 
 type SpinnerProps = {
   onComplete: (points: number) => void;

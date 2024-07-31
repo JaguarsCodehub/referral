@@ -13,6 +13,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: '/', label: 'HOME', isActive: true },
+  { href: '/quest', label: 'QUEST' },
   { href: '/leaderboard', label: 'LEADERBOARD' },
 
 ];
