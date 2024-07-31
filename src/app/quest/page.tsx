@@ -41,15 +41,15 @@ const Quests = () => {
             <div className='bg-black pt-28'>
                 <div className='p-12'>
                     <h1 className='text-4xl text-white font-semibold'>
-                        Complete Quest Tasks and earn real points!
+                        Complete quest & earn more points!
                     </h1>
                     <p className='text-purple-400 text-xl'>
-                        You can earn real points by completing some tasks and earning rewards right into your account!
+                        Note: your total points will be added to the playground beta test.
                     </p>
                 </div>
                 <div className='p-12'>
                     <h2 className='text-4xl text-white font-semibold mb-4'>
-                        YOUR POINTS: {points}
+                        YOUR TOTAL POINTS: {points}
                     </h2>
                     <DashboardCards referral_code={referral_code} />
                 </div>

@@ -3,10 +3,22 @@
 import { CardWithForm } from '@/components/card-form';
 import { Navbar } from '@/components/navbar';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 
 export const dynamic = 'force-dynamic';
 
 const Home = () => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const referralCode = localStorage.getItem('referral_code');
+    if (referralCode) {
+      router.push(`/dashboard?referral_code=${referralCode}`);
+    }
+  }, [router]);
+
   return (
     <div>
       <Navbar />

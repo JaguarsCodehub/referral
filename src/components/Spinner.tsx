@@ -44,8 +44,10 @@ const Spinner: React.FC<SpinnerProps> = ({ onComplete }) => {
   }, [spinning, onComplete]);
 
   const handleSpin = () => {
-    setSpinning(true);
-    setSelectedTile(null);
+    if (!spinCooldown) {
+      setSpinning(true);
+      setSelectedTile(null);
+    }
   };
 
   return (
@@ -54,11 +56,9 @@ const Spinner: React.FC<SpinnerProps> = ({ onComplete }) => {
         {tiles.map((points, index) => (
           <div
             key={index}
-            className={`${styles.tile} ${selectedTile === index ? styles.selected : ''
-              }`}
+            className={`${styles.tile} ${selectedTile === index ? styles.selected : ''}`}
             style={{
-              transform: `rotate(${(360 / tiles.length) * index
-                }deg) translate(80px)`,
+              transform: `rotate(${(360 / tiles.length) * index}deg) translate(80px)`,
             }}
           >
             {points}
@@ -68,7 +68,7 @@ const Spinner: React.FC<SpinnerProps> = ({ onComplete }) => {
       <div className='justify-center items-center'>
         <button
           id='spinner-button'
-          className='bg-purple-800 text-white p-2 rounded'
+          className='bg-purple-800 text-white p-2 rounded mt-4'
           onClick={handleSpin}
           disabled={spinning || spinCooldown}
         >

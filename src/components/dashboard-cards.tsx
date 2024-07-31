@@ -57,21 +57,18 @@ const DashboardCards = ({ referral_code }: { referral_code: string | null }) => 
             className='p-4 w-44 h-40 bg-black/40 border border-white rounded-lg shadow-lg flex flex-col items-center'
           >
             <div className='text-lg mb-2'>{card.points}</div>
-            <div className={`px-2 py-1 rounded-full ${card.status === 'Claim' ? 'bg-purple-500' : 'bg-gray-600'} mb-2`}>
-              {card.status}
+            <div
+              className={`px-2 py-1 rounded-full ${card.status === 'Claim'
+                  ? claimed[card.id - 1]
+                    ? 'bg-green-500'
+                    : 'bg-purple-500 cursor-pointer'
+                  : 'bg-gray-600'
+                } mb-2`}
+              onClick={() => card.status === 'Claim' && !claimed[card.id - 1] && handleClaim(card.id)}
+            >
+              {card.status === 'Claim' && claimed[card.id - 1] ? 'Claimed!' : card.status}
             </div>
             <div className='text-center'>{card.title}</div>
-            {card.status === 'Claim' && !claimed[card.id - 1] && (
-              <button
-                onClick={() => handleClaim(card.id)}
-                className='mt-2 bg-green-500 text-white px-4 py-2 rounded-full'
-              >
-                Claim
-              </button>
-            )}
-            {card.status === 'Claim' && claimed[card.id - 1] && (
-              <div className='mt-2 text-green-500'>Claimed!</div>
-            )}
           </div>
         ))}
       </div>

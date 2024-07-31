@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 interface User {
   twitter_username: string;
@@ -11,6 +12,30 @@ const Leaderboard = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const referral_code = searchParams.get('referral_code');
+  const [points, setPoints] = useState(0);
+  const router = useRouter()
+
+  React.useEffect(() => {
+    const referralCode = localStorage.getItem('referral_code');
+    if (referralCode) {
+      router.push(`/leaderboard?referral_code=${referralCode}`);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (referral_code) {
+        const res = await fetch(`/api/getUserPoints?referral_code=${referral_code}`);
+        const data = await res.json();
+        setPoints(data.points);
+      }
+    };
+
+    fetchData();
+  }, [referral_code]);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -75,6 +100,9 @@ const Leaderboard = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div>
+        <h2 className='text-3xl text-white font-semibold mt-12'>Your Total Points: {points}</h2>
       </div>
     </div>
   );
