@@ -1,5 +1,6 @@
 'use client';
 
+import { Navbar } from '@/components/navbar';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -75,34 +76,37 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className="container bg-black h-screen py-10">
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-white p-4 rounded-sm shadow-md inline-block">
-          <span className='font-semibold'>Leaderboard</span>
-        </h1>
-      </div>
-      <div className="bg-purple-600 text-white rounded-lg shadow-md overflow-hidden">
-        <table className="min-w-full leading-normal">
-          <thead>
-            <tr className="bg-purple-800 text-left text-xs uppercase font-semibold">
-              <th className="px-5 py-3 border-b border-purple-500">Rank</th>
-              <th className="px-5 py-3 border-b border-purple-500">Player Username</th>
-              <th className="px-5 py-3 border-b border-purple-500">Points</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm divide-y divide-purple-500">
-            {users.map((user, index) => (
-              <tr key={index} className="hover:bg-purple-700">
-                <td className="px-5 py-4">{index + 1}</td>
-                <td className="px-5 py-4">{user.twitter_username}</td>
-                <td className="px-5 py-4">{user.points}</td>
+    <div>
+      <Navbar />
+      <div className="container bg-black h-screen py-10 pt-20">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold text-white p-4 rounded-sm shadow-md inline-block">
+            <span className='font-semibold'>Leaderboard</span>
+          </h1>
+        </div>
+        <div className="bg-purple-600 text-white rounded-lg shadow-md overflow-hidden">
+          <table className="min-w-full leading-normal">
+            <thead>
+              <tr className="bg-purple-800 text-left text-xs uppercase font-semibold">
+                <th className="px-5 py-3 border-b border-purple-500">Rank</th>
+                <th className="px-5 py-3 border-b border-purple-500">Player Username</th>
+                <th className="px-5 py-3 border-b border-purple-500">Points</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div>
-        <h2 className='text-3xl text-white font-semibold mt-12'>Your Total Points: {points}</h2>
+            </thead>
+            <tbody className="text-sm divide-y divide-purple-500">
+              {users.map((user, index) => (
+                <tr key={index} className="hover:bg-purple-700">
+                  <td className="px-5 py-4">{index + 1}</td>
+                  <td className="px-5 py-4">{user.twitter_username}</td>
+                  <td className="px-5 py-4">{user.points}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <h2 className='text-3xl text-white font-semibold mt-12'>Your Total Points: {points}</h2>
+        </div>
       </div>
     </div>
   );

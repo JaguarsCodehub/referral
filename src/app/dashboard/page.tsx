@@ -98,7 +98,7 @@ const Dashboard = () => {
         <div className='px-4 md:px-24 py-6 mt-8'>
           <div className=''>
             <h1 className='text-white text-2xl md:text-4xl font-semibold'>
-              Raffle Link
+              Referral Link
             </h1>
             <p className='text-purple-500 text-2xl font-semibold'>
               Your referral link: {''}
@@ -127,15 +127,15 @@ const Dashboard = () => {
 
         {spinCooldown ? (
           <div className='px-4 md:px-24 mt-8'>
-            <p className='text-red-500 text-lg font-semibold'>
-              You have already spinned 1 time. Next spin after 24 hours.
-            </p>
             {cooldownTimeLeft !== null && (
-              <p className='text-white'>
-                Spin available in: {Math.floor(cooldownTimeLeft / 1000 / 60 / 60)}h{' '}
-                {Math.floor((cooldownTimeLeft / 1000 / 60) % 60)}m{' '}
-                {Math.floor((cooldownTimeLeft / 1000) % 60)}s
-              </p>
+              <div>
+                <Spinner onComplete={handleSpinComplete} />
+                <p className='text-white text-2xl font-semibold'>
+                  Spin available in: {Math.floor(cooldownTimeLeft / 1000 / 60 / 60)}h{' '}
+                  {Math.floor((cooldownTimeLeft / 1000 / 60) % 60)}m{' '}
+                  {Math.floor((cooldownTimeLeft / 1000) % 60)}s
+                </p>
+              </div>
             )}
           </div>
         ) : (

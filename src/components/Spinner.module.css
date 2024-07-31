@@ -11,15 +11,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: white; */
   width: 80vw;
-  /* Responsive spinner width */
+  /* Make spinner width responsive */
   height: 80vw;
-  /* Responsive spinner height */
+  /* Make spinner height responsive */
   max-width: 300px;
-  /* Max size for larger screens */
+  /* Set a maximum size for larger screens */
   max-height: 300px;
-  /* Max size for larger screens */
+  /* Set a maximum size for larger screens */
   position: relative;
   overflow: hidden;
   border-radius: 50%;
@@ -28,53 +27,51 @@
 .tile {
   position: absolute;
   width: 25vw;
-  /* Responsive tile width */
+  /* Make tile width responsive */
   height: 25vw;
-  /* Responsive tile height */
+  /* Make tile height responsive */
   max-width: 100px;
-  /* Max size for larger screens */
+  /* Set a maximum size for larger screens */
   max-height: 100px;
-  /* Max size for larger screens */
+  /* Set a maximum size for larger screens */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d289ff;
   border: 1px solid #fff;
   border-radius: 50%;
-  transform-origin: 50% 100px;
-  /* Adjust the origin */
 }
 
 .tile:nth-child(1) {
-  transform: rotate(0deg) translate(100px);
+  transform: rotate(0deg) translate(40%);
 }
 
 .tile:nth-child(2) {
-  transform: rotate(45deg) translate(100px);
+  transform: rotate(45deg) translate(40%);
 }
 
 .tile:nth-child(3) {
-  transform: rotate(90deg) translate(100px);
+  transform: rotate(90deg) translate(40%);
 }
 
 .tile:nth-child(4) {
-  transform: rotate(135deg) translate(100px);
+  transform: rotate(135deg) translate(40%);
 }
 
 .tile:nth-child(5) {
-  transform: rotate(180deg) translate(100px);
+  transform: rotate(180deg) translate(40%);
 }
 
 .tile:nth-child(6) {
-  transform: rotate(225deg) translate(100px);
+  transform: rotate(225deg) translate(40%);
 }
 
 .tile:nth-child(7) {
-  transform: rotate(270deg) translate(100px);
+  transform: rotate(270deg) translate(40%);
 }
 
 .tile:nth-child(8) {
-  transform: rotate(315deg) translate(100px);
+  transform: rotate(315deg) translate(40%);
 }
 
 .selected {
@@ -82,20 +79,6 @@
   color: #fff;
   transform: scale(1.2);
   transition: transform 0.3s ease;
-}
-
-.spinning {
-  animation: spinAnimation 3s linear infinite;
-}
-
-@keyframes spinAnimation {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
 }
 
 #spinner-button {
