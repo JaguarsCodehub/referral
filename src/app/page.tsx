@@ -9,7 +9,6 @@ import React, { useEffect } from 'react';
 export const dynamic = 'force-dynamic';
 
 const Home = () => {
-
   const router = useRouter();
 
   useEffect(() => {
