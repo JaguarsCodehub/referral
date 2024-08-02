@@ -1,7 +1,6 @@
 import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 
-const GOOGLE_CLIENT_ID = ''
 
 const GoogleSignIn = () => {
     const handleSuccess = async (response: any) => {
