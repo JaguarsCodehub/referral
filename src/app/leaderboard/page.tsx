@@ -93,9 +93,9 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className='bg-black'>
+    <div className='bg-black h-screen'>
       <Navbar />
-      <div className='container bg-black h-screen min-h-screen py-10 pt-20'>
+      <div className='container bg-black h-screen py-10 pt-20'>
         <div className='text-center mb-10'>
           <h1 className='text-4xl font-bold text-white p-4 rounded-sm shadow-md inline-block'>
             <span className='font-semibold'>Leaderboard</span>

@@ -43,7 +43,7 @@ const Dashboard = () => {
       } else {
         // Handle the case where referral_code is null
         toast({
-          title: 'No Referral Code Found',
+          title: 'Please check if you have a referral code',
           description: 'Please make sure you have a valid referral code.',
         });
         // Optionally redirect to another page
@@ -52,7 +52,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [referral_code, toast, router]);
+  }, [referral_code, toast]);
 
   useEffect(() => {
     const lastSpinTime = localStorage.getItem('lastSpinTime');
