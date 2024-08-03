@@ -15,8 +15,8 @@ export const dynamic = 'force-dynamic';
 const Dashboard = () => {
   const searchParams = useSearchParams();
   const referral_code = searchParams.get('referral_code');
-  const router = useRouter()
-  const { toast } = useToast()
+  const router = useRouter();
+  const { toast } = useToast();
   const [points, setPoints] = useState(0);
   const [spinCooldown, setSpinCooldown] = useState(false);
   const [cooldownTimeLeft, setCooldownTimeLeft] = useState<number | null>(null);
@@ -37,7 +37,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (referral_code) {
-        const res = await fetch(`/api/getUserPoints?referral_code=${referral_code}`);
+        const res = await fetch(
+          `/api/getUserPoints?referral_code=${referral_code}`
+        );
         const data = await res.json();
         setPoints(data.points);
       } else {
@@ -108,14 +110,15 @@ const Dashboard = () => {
     // Show toast
     toast({
       title: `Congratulations! You earned ${newPoints} points!`,
-      description: "Come back tomorrow to earn more !"
-    })
+      description: 'Come back tomorrow to earn more !',
+    });
   };
 
   const copyToClipboard = () => {
     if (referral_code) {
-      const referralLink = `https://referral-eight.vercel.app/?ref=${referral_code}`;
-      navigator.clipboard.writeText(referralLink)
+      const referralLink = `https://catcents.io/?ref=${referral_code}`;
+      navigator.clipboard
+        .writeText(referralLink)
         .then(() => setCopySuccess('Referral link copied!'))
         .catch(() => setCopySuccess('Failed to copy the link.'));
     }
@@ -131,7 +134,7 @@ const Dashboard = () => {
               Your referral link: {''}
             </p>
             <p className='text-white md:text-2xl'>
-              {`https://referral-eight.vercel.app/?ref=${referral_code}`}
+              {`https://catcents.io/?ref=${referral_code}`}
             </p>
           </div>
           <button
@@ -158,7 +161,8 @@ const Dashboard = () => {
               <div>
                 <Spinner onComplete={handleSpinComplete} />
                 <p className='text-white text-2xl font-semibold'>
-                  Spin available in: {Math.floor(cooldownTimeLeft / 1000 / 60 / 60)}h{' '}
+                  Spin available in:{' '}
+                  {Math.floor(cooldownTimeLeft / 1000 / 60 / 60)}h{' '}
                   {Math.floor((cooldownTimeLeft / 1000 / 60) % 60)}m{' '}
                   {Math.floor((cooldownTimeLeft / 1000) % 60)}s
                 </p>
@@ -178,14 +182,13 @@ const Dashboard = () => {
       </div>
 
       <div className='p-12 bg-black items-center justify-center flex flex-col min-h-72'>
-        <h1 className='text-2xl md:text-4xl text-white font-semibold'>Complete quests and earn points right now !</h1>
+        <h1 className='text-2xl md:text-4xl text-white font-semibold'>
+          Complete quests and earn points right now !
+        </h1>
         <button className='bg-white text-black p-2 rounded-sm font-semibold ml-4 mt-8'>
-          <Link href='/quest'>
-            Join Quests
-          </Link>
+          <Link href='/quest'>Join Quests</Link>
         </button>
       </div>
-
 
       <RunningString />
     </div>
