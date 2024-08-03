@@ -40,11 +40,19 @@ const Dashboard = () => {
         const res = await fetch(`/api/getUserPoints?referral_code=${referral_code}`);
         const data = await res.json();
         setPoints(data.points);
+      } else {
+        // Handle the case where referral_code is null
+        toast({
+          title: 'No Referral Code Found',
+          description: 'Please make sure you have a valid referral code.',
+        });
+        // Optionally redirect to another page
+        router.push('/form');
       }
     };
 
     fetchData();
-  }, [referral_code]);
+  }, [referral_code, toast, router]);
 
   useEffect(() => {
     const lastSpinTime = localStorage.getItem('lastSpinTime');
