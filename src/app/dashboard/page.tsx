@@ -97,9 +97,6 @@ const Dashboard = () => {
       <div className='bg-black p-12 mt-12'>
         <div className='px-4 md:px-24 py-6 mt-8'>
           <div className=''>
-            <h1 className='text-white text-2xl md:text-4xl font-semibold'>
-              Referral Link
-            </h1>
             <p className='text-purple-500 text-2xl font-semibold'>
               Your referral link: {''}
             </p>

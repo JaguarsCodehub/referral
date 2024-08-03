@@ -1,3 +1,4 @@
+// Spinner.tsx
 import React, { useState, useEffect } from 'react';
 import styles from './Spinner.module.css';
 
@@ -65,10 +66,10 @@ const Spinner: React.FC<SpinnerProps> = ({ onComplete }) => {
           </div>
         ))}
       </div>
-      <div className='justify-center items-center'>
+      <div className="justify-center items-center">
         <button
-          id='spinner-button'
-          className='bg-purple-800 text-white p-2 rounded mt-4'
+          id="spinner-button"
+          className="bg-purple-800 text-white p-2 rounded mt-4"
           onClick={handleSpin}
           disabled={spinning || spinCooldown}
         >

@@ -12,13 +12,9 @@
   justify-content: center;
   align-items: center;
   width: 80vw;
-  /* Make spinner width responsive */
   height: 80vw;
-  /* Make spinner height responsive */
   max-width: 300px;
-  /* Set a maximum size for larger screens */
   max-height: 300px;
-  /* Set a maximum size for larger screens */
   position: relative;
   overflow: hidden;
   border-radius: 50%;
@@ -27,51 +23,15 @@
 .tile {
   position: absolute;
   width: 25vw;
-  /* Make tile width responsive */
   height: 25vw;
-  /* Make tile height responsive */
   max-width: 100px;
-  /* Set a maximum size for larger screens */
   max-height: 100px;
-  /* Set a maximum size for larger screens */
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #d289ff;
   border: 1px solid #fff;
   border-radius: 50%;
-}
-
-.tile:nth-child(1) {
-  transform: rotate(0deg) translate(40%);
-}
-
-.tile:nth-child(2) {
-  transform: rotate(45deg) translate(40%);
-}
-
-.tile:nth-child(3) {
-  transform: rotate(90deg) translate(40%);
-}
-
-.tile:nth-child(4) {
-  transform: rotate(135deg) translate(40%);
-}
-
-.tile:nth-child(5) {
-  transform: rotate(180deg) translate(40%);
-}
-
-.tile:nth-child(6) {
-  transform: rotate(225deg) translate(40%);
-}
-
-.tile:nth-child(7) {
-  transform: rotate(270deg) translate(40%);
-}
-
-.tile:nth-child(8) {
-  transform: rotate(315deg) translate(40%);
 }
 
 .selected {
@@ -94,4 +54,18 @@
 #spinner-button:disabled {
   background-color: #999;
   cursor: not-allowed;
+}
+
+.spinning {
+  animation: spin 3s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
