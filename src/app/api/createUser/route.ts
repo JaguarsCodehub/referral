@@ -13,7 +13,15 @@ export async function POST(req: NextRequest) {
   // Insert the new user
   const { data, error } = await supabase
     .from('users')
-    .insert([{ twitter_username, discord_username, referral_code, referred_by, points: initialPoints }])
+    .insert([
+      {
+        twitter_username,
+        discord_username,
+        referral_code,
+        referred_by,
+        points: initialPoints,
+      },
+    ])
     .select()
     .single();
 
