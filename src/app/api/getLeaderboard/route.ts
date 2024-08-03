@@ -1,15 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+// pages/api/getLeaderboard.ts
+import { NextApiRequest, NextApiResponse } from 'next';
 import { supabase } from '@/lib/supabase';
 
-export async function GET(req: NextRequest) {
+const getLeaderboard = async (req: NextApiRequest, res: NextApiResponse) => {
   const { data, error } = await supabase
     .from('users')
     .select('twitter_username, points')
     .order('points', { ascending: false });
 
   if (error) {
-    return NextResponse.json([], { status: 200 }); // Returning an empty array in case of error
+    return res.status(500).json({ message: 'Error fetching leaderboard data.' });
   }
 
-  return NextResponse.json(data, { status: 200 });
-}
+  return res.status(200).json(data);
+};
+
+export default getLeaderboard;

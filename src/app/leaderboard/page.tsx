@@ -3,6 +3,7 @@
 import { Navbar } from '@/components/navbar';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 interface User {
   twitter_username: string;
@@ -19,7 +20,7 @@ const Leaderboard = () => {
   const [points, setPoints] = useState(0);
   const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const referralCode = localStorage.getItem('referral_code');
     if (referralCode) {
       router.push(`/leaderboard?referral_code=${referralCode}`);
@@ -29,11 +30,16 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (referral_code) {
-        const res = await fetch(
-          `/api/getUserPoints?referral_code=${referral_code}`
-        );
-        const data = await res.json();
-        setPoints(data.points);
+        const { data, error } = await supabase
+          .from('users')
+          .select('points')
+          .eq('referral_code', referral_code);
+
+        if (error) {
+          setError('Failed to fetch user points.');
+        } else if (data && data.length > 0) {
+          setPoints(data[0].points);
+        }
       }
     };
 
@@ -42,23 +48,32 @@ const Leaderboard = () => {
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
-      try {
-        const res = await fetch('/api/getLeaderboard');
-        const data = await res.json();
+      const { data, error } = await supabase
+        .from('users')
+        .select('twitter_username, points')
+        .order('points', { ascending: false });
 
-        if (Array.isArray(data)) {
-          setUsers(data);
-        } else {
-          setError('Failed to fetch leaderboard.');
-        }
-      } catch (err) {
-        setError('An error occurred while fetching the leaderboard.');
-      } finally {
-        setLoading(false);
+      if (error) {
+        setError('Failed to fetch leaderboard.');
+      } else {
+        setUsers(data);
       }
+      setLoading(false);
     };
 
     fetchLeaderboard();
+
+    // Subscribe to changes in the 'users' table
+    const subscription = supabase
+      .channel('leaderboard')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, (payload) => {
+        fetchLeaderboard(); // Refresh the leaderboard data on any change
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription); // Clean up subscription on unmount
+    };
   }, []);
 
   if (loading) {
