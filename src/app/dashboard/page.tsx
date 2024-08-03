@@ -1,22 +1,38 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Spinner from '@/components/Spinner';
 import { Navbar } from '@/components/navbar';
 import RunningString from '@/components/running-string';
 import DashboardCards from '@/components/dashboard-cards';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
+import { useToast } from '@/components/ui/use-toast';
 
 export const dynamic = 'force-dynamic';
 
 const Dashboard = () => {
   const searchParams = useSearchParams();
   const referral_code = searchParams.get('referral_code');
+  const router = useRouter()
+  const { toast } = useToast()
   const [points, setPoints] = useState(0);
   const [spinCooldown, setSpinCooldown] = useState(false);
   const [cooldownTimeLeft, setCooldownTimeLeft] = useState<number | null>(null);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        // If the user is not authenticated, redirect to the sign-in page
+        router.push('/');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +96,12 @@ const Dashboard = () => {
     setTimeout(() => {
       setSpinCooldown(false);
     }, 24 * 60 * 60 * 1000); // 24 hours in milliseconds
+
+    // Show toast
+    toast({
+      title: `Congratulations! You earned ${newPoints} points!`,
+      description: "Come back tomorrow to earn more !"
+    })
   };
 
   const copyToClipboard = () => {

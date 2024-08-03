@@ -1,4 +1,3 @@
-// app/page.tsx or pages/index.tsx
 'use client';
 import { CardWithForm } from '@/components/card-form';
 import {
@@ -9,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Navbar } from '@/components/navbar';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
@@ -20,15 +18,6 @@ import { FcGoogle } from 'react-icons/fc'; // Importing Google icon
 export const dynamic = 'force-dynamic';
 
 const Home = () => {
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   const referralCode = localStorage.getItem('referral_code');
-  //   if (referralCode) {
-  //     router.push(`/dashboard?referral_code=${referralCode}`);
-  //   }
-  // }, [router]);
-
   const router = useRouter();
   const [error, setError] = useState('');
 
@@ -36,8 +25,7 @@ const Home = () => {
     const handleAuthChange = async () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
-        const { user } = data.session;
-        // await createOrUpdateUser(user);
+        // Ensure the user is authenticated
         router.push('/form');
       }
     };
@@ -54,21 +42,13 @@ const Home = () => {
       provider: 'google',
     });
 
-    router.push('/form')
-
     if (error) {
       setError(error.message);
     }
   };
 
-
-
-
-
-
   return (
     <div>
-      {/* <Navbar /> */}
       <div className='bg-black flex h-screen items-center justify-center p-12 md:p-24'>
         <Card className="w-[350px] bg-black">
           <CardHeader>
@@ -85,7 +65,6 @@ const Home = () => {
             </Button>
           </CardFooter>
         </Card>
-
       </div>
     </div>
   );
