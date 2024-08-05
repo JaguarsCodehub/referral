@@ -1,19 +1,12 @@
 'use client';
 import { CardWithForm } from '@/components/card-form';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { FcGoogle } from 'react-icons/fc'; // Importing Google icon
+import { FcGoogle } from 'react-icons/fc';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +19,7 @@ const Home = () => {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
         // Ensure the user is authenticated
-        router.push('/form');
+        router.push('/dashboard');
       }
     };
 
@@ -38,10 +31,7 @@ const Home = () => {
   }, [router]);
 
   const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
+    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
     if (error) {
       setError(error.message);
     }
@@ -60,7 +50,7 @@ const Home = () => {
           </CardContent>
           <CardFooter className="flex justify-center">
             <Button variant="outline" onClick={handleGoogleSignIn} className="flex items-center space-x-2">
-              <FcGoogle className="text-2xl" /> {/* Google icon */}
+              <FcGoogle className="text-2xl" />
               <span>Sign in with Google</span>
             </Button>
           </CardFooter>
