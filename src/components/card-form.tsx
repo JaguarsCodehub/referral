@@ -1,5 +1,5 @@
 'use client';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,46 +12,61 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 export function CardWithForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const [twitterUsername, setTwitterUsername] = React.useState('');
-  const [discordUsername, setDiscordUsername] = React.useState('');
-  const [error, setError] = React.useState('');
-  const ref = searchParams.get('ref');
+  const [twitterUsername, setTwitterUsername] = useState('');
+  const [discordUsername, setDiscordUsername] = useState('');
+  const [error, setError] = useState('');
 
-  // Check if the user already has a referral code stored
-  React.useEffect(() => {
+  useEffect(() => {
+    // Check if the user already has a referral code stored
     const referralCode = localStorage.getItem('referral_code');
     if (referralCode) {
       router.push(`/dashboard?referral_code=${referralCode}`);
     }
   }, [router]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const res = await fetch('/api/createUser', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        twitter_username: twitterUsername,
-        discord_username: discordUsername,
-        referred_by: ref,
-      }),
-    });
+  const handleSubmit = async (e: any) => {
+    e.preventDefault(); // Prevent default form submission behavior
 
-    const data = await res.json();
+    // Fetch session and get the access token
+    const { data, error } = await supabase.auth.getSession();
+    if (error || !data.session) {
+      setError('Failed to retrieve session. Please log in.');
+      return;
+    }
 
-    if (res.ok) {
-      // Store the referral code in local storage
-      localStorage.setItem('referral_code', data.referral_code);
-      router.push(`/dashboard?referral_code=${data.referral_code}`);
-    } else {
-      setError(data.error);
+    const accessToken = data.session.access_token;
+
+    try {
+      const response = await fetch('/api/createUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ twitter_username: twitterUsername, discord_username: discordUsername }),
+      });
+
+      router.push('/dashboard')
+
+      const result = await response.json();
+      if (response.ok) {
+        // Store the referral code in local storage
+        if (result.referral_code) {
+          localStorage.setItem('referral_code', result.referral_code);
+          router.push(`/dashboard?referral_code=${result.referral_code}`);
+        } else {
+          setError('No referral code returned from server.');
+        }
+      } else {
+        setError(result.error || 'Failed to create user.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('An unexpected error occurred.');
     }
   };
 
@@ -60,18 +75,18 @@ export function CardWithForm() {
       <CardHeader>
         <CardTitle className='text-black'>Welcome to Catcents</CardTitle>
         <CardDescription className='text-slate-900'>
-          Early Access just for you{' '}
+          Early Access just for you
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {error && <p>{error}</p>}
-        <form>
+        {error && <p className="text-red-600">{error}</p>}
+        <form onSubmit={handleSubmit}>
           <div className='grid w-full items-center gap-4'>
             <div className='flex flex-col space-y-1.5'>
               <Label htmlFor='twitterUsername'>Twitter Username</Label>
               <Input
                 id='twitterUsername'
-                placeholder='Enter your twitter username'
+                placeholder='Enter your Twitter username'
                 type='text'
                 value={twitterUsername}
                 onChange={(e) => setTwitterUsername(e.target.value)}
@@ -82,7 +97,7 @@ export function CardWithForm() {
               <Label htmlFor='discordUsername'>Discord Username</Label>
               <Input
                 id='discordUsername'
-                placeholder='Enter your discord username'
+                placeholder='Enter your Discord username'
                 value={discordUsername}
                 type='text'
                 onChange={(e) => setDiscordUsername(e.target.value)}
@@ -90,13 +105,11 @@ export function CardWithForm() {
               />
             </div>
           </div>
+          <CardFooter className='flex justify-between mt-10'>
+            <Button type='submit'>Submit</Button>
+          </CardFooter>
         </form>
       </CardContent>
-      <CardFooter className='flex justify-between'>
-        <Button onClick={handleSubmit} type='submit'>
-          Submit
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

@@ -1,20 +1,30 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const referral_code = searchParams.get('referral_code');
+export async function GET(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const userId = url.searchParams.get('user_id');
 
-  const { data, error } = await supabase
-    .from('users')
-    .select('points')
-    .eq('referral_code', referral_code)
-    .single();
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+    }
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    // Fetch user points from Supabase
+    const { data, error } = await supabase
+      .from('user')
+      .select('points')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    // Return user points
+    return NextResponse.json({ points: data?.points || 0 });
+  } catch (error) {
+    console.error('Error fetching user points:', error);
+    return NextResponse.json({ error: 'Failed to fetch user points' }, { status: 500 });
   }
-
-  return NextResponse.json(data, { status: 200 });
 }

@@ -1,21 +1,47 @@
-// app/page.tsx or pages/index.tsx
 'use client';
 import { CardWithForm } from '@/components/card-form';
 import { Navbar } from '@/components/navbar';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
 const Form = () => {
     const router = useRouter();
+    const [formFilled, setFormFilled] = useState(false);
 
     useEffect(() => {
-        const referralCode = localStorage.getItem('referral_code');
-        if (referralCode) {
-            router.push(`/dashboard?referral_code=${referralCode}`);
+        const fetchSession = async () => {
+            const { data } = await supabase.auth.getSession()
+            console.log(data)
         }
+        fetchSession()
+    }, [])
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data } = await supabase.auth.getSession();
+            if (!data.session) {
+                router.push('/');
+            } else {
+                const { user } = data.session;
+                const { data: userInfo } = await supabase
+                    .from('user')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+
+                if (userInfo && userInfo.twitter_username && userInfo.discord_username) {
+                    router.push('/dashboard');
+                } else {
+                    setFormFilled(true);
+                }
+            }
+        };
+
+        checkAuth();
     }, [router]);
 
     return (
@@ -29,9 +55,11 @@ const Form = () => {
                     width={500}
                     height={500}
                 />
-                <div className='mt-20'>
-                    <CardWithForm />
-                </div>
+                {formFilled && (
+                    <div className='mt-20'>
+                        <CardWithForm />
+                    </div>
+                )}
             </div>
         </div>
     );

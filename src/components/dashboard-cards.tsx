@@ -11,7 +11,7 @@ const cards = [
   { id: 8, points: 2000, status: 'Soon', title: 'COMING SOON' },
 ];
 
-const DashboardCards = ({ referral_code }: { referral_code: string | null }) => {
+const DashboardCards = ({ userId }: { userId: string }) => {
   const [claimed, setClaimed] = useState<boolean[]>(new Array(cards.length).fill(false));
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const DashboardCards = ({ referral_code }: { referral_code: string | null }) => 
   const handleClaim = async (id: number) => {
     if (claimed[id - 1]) return;
 
-    // Add 500 welcome points
-    const welcomePoints = 500;
+    // Add points based on card
+    const pointsToAdd = cards.find(card => card.id === id)?.points || 0;
 
     // Update the user's points in the database
     const response = await fetch('/api/updateUserPoints', {
@@ -34,7 +34,7 @@ const DashboardCards = ({ referral_code }: { referral_code: string | null }) => 
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ referral_code, newPoints: welcomePoints }),
+      body: JSON.stringify({ userId, newPoints: pointsToAdd }),
     });
 
     if (response.ok) {
@@ -59,10 +59,10 @@ const DashboardCards = ({ referral_code }: { referral_code: string | null }) => 
             <div className='text-lg mb-2'>{card.points}</div>
             <div
               className={`px-2 py-1 rounded-full ${card.status === 'Claim'
-                  ? claimed[card.id - 1]
-                    ? 'bg-green-500'
-                    : 'bg-purple-500 cursor-pointer'
-                  : 'bg-gray-600'
+                ? claimed[card.id - 1]
+                  ? 'bg-green-500'
+                  : 'bg-purple-500 cursor-pointer'
+                : 'bg-gray-600'
                 } mb-2`}
               onClick={() => card.status === 'Claim' && !claimed[card.id - 1] && handleClaim(card.id)}
             >

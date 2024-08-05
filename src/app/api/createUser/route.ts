@@ -1,60 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 export async function POST(req: NextRequest) {
-  const { twitter_username, discord_username, referred_by } = await req.json();
-
-  // Generate a unique referral code
-  const referral_code = Math.random().toString(36).substring(2, 15);
-
-  // Set initial points: Welcome points (500) + Signup points (100)
-  let initialPoints = 100;
-
-  // Insert the new user
-  const { data, error } = await supabase
-    .from('users')
-    .insert([
-      {
-        twitter_username,
-        discord_username,
-        referral_code,
-        referred_by,
-        points: initialPoints,
-      },
-    ])
-    .select()
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  const authHeader = req.headers.get('Authorization');
+  if (!authHeader) {
+    return NextResponse.json({ error: 'Authorization header missing' }, { status: 401 });
   }
 
-  // Update points for the referrer
-  if (referred_by) {
-    const { data: referrerData, error: referrerError } = await supabase
-      .from('users')
-      .select('points')
-      .eq('referral_code', referred_by)
-      .single();
+  const token = authHeader.split(' ')[1];
+  if (!token) {
+    return NextResponse.json({ error: 'Token missing' }, { status: 401 });
+  }
 
-    if (referrerError) {
-      return NextResponse.json(
-        { error: referrerError.message },
-        { status: 500 }
-      );
-    }
+  // Verify the token with Supabase
+  const { data: { user }, error } = await supabase.auth.getUser(token);
 
-    const newPoints = (referrerData?.points || 0) + 100;
+  if (error || !user) {
+    console.error('Error verifying token or user not found:', error);
+    return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
+  }
 
+  try {
+    const { twitter_username, discord_username } = await req.json();
+
+    // Update user data in Supabase
     const { error: updateError } = await supabase
-      .from('users')
-      .update({ points: newPoints })
-      .eq('referral_code', referred_by);
+      .from('user')
+      .update({ twitter_username, discord_username })
+      .eq('id', user.id);
 
     if (updateError) {
+      console.error('Error updating user data:', updateError);
       return NextResponse.json({ error: updateError.message }, { status: 500 });
     }
-  }
 
-  return NextResponse.json(data, { status: 200 });
+    return NextResponse.json({ message: 'User data updated successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error in POST request:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

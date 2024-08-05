@@ -16,10 +16,35 @@ const Home = () => {
 
   useEffect(() => {
     const handleAuthChange = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        // Ensure the user is authenticated
-        router.push('/dashboard');
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          const { user } = data.session;
+          const { data: existingUsers, error } = await supabase
+            .from('user')
+            .select('*')
+            .eq('id', user.id);
+
+          if (error) {
+            console.error('Error fetching users:', error);
+          } else if (existingUsers.length === 0) {
+            // No existing user, handle the case where user is new
+            const referralCode = createReferralCode();
+            await supabase
+              .from('user')
+              .insert([{ id: user.id, email: user.email, referral_code: referralCode, points: 100 }]);
+          } else if (existingUsers.length === 1) {
+            // One existing user, proceed as normal
+            const existingUser = existingUsers[0];
+            // Handle existing user
+          } else {
+            // More than one row returned, handle accordingly
+            console.error('Unexpected number of rows returned:', existingUsers.length);
+          }
+          router.push('/form');
+        }
+      } catch (error) {
+        console.error('Error handling auth change:', error);
       }
     };
 
@@ -30,11 +55,17 @@ const Home = () => {
     };
   }, [router]);
 
+
+
   const handleGoogleSignIn = async () => {
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google' });
     if (error) {
       setError(error.message);
     }
+  };
+
+  const createReferralCode = () => {
+    return `REF-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
   };
 
   return (
