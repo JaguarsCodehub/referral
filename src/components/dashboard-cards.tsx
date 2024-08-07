@@ -87,10 +87,10 @@ const DashboardCards = ({ userId }: { userId: string }) => {
   };
 
   const shareOnTwitter = () => {
-    const text = encodeURIComponent(
-      'I just applied for the @wowBaoBaoXYZ NFT Whitelist!'
-    );
-    const url = `https://twitter.com/intent/tweet?url=https%3A%2F%2Fcatcents.io%2F%3Fref%3D${referralCode}&text=Join%20me%20at%20catcents%20&hashtags=%23catcents`;
+    // const text = encodeURIComponent(
+    //   'I just applied for the @wowBaoBaoXYZ NFT Whitelist!'
+    // );
+    const url = `I just applied for early access at @Catcentsio. Join now and grab your spot! ${referralCode}`;
     window.open(url, '_blank');
   };
 
