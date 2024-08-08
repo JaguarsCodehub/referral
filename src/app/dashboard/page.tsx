@@ -136,7 +136,7 @@ const Dashboard = () => {
     // const text = encodeURIComponent(
     //   'I just applied for the @wowBaoBaoXYZ NFT Whitelist!'
     // );
-    const url = `I just applied for early access at @Catcentsio. Join now and grab your spot! https://catcents.io/?ref=${referralCode}`;
+    const url = `https://twitter.com/intent/tweet?url=https%3A%2F%2Fcatcents.io%2F%3Fref%3D${referralCode}&text=I%20just%20applied%20for%20early%20access%20at%20@Catcentsio.%20Join%20now%20and%20grab%20your%20spot%21`;
     window.open(url, '_blank');
   };
 
