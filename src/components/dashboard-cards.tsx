@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useToast } from './ui/use-toast';
 
 const cards = [
   { id: 1, points: 500, status: 'Claim', title: 'Welcome Points' },
@@ -15,6 +16,7 @@ const cards = [
 
 const DashboardCards = ({ userId }: { userId: string }) => {
   const router = useRouter();
+  const { toast } = useToast();
   const [claimed, setClaimed] = useState<boolean[]>(new Array(cards.length).fill(false));
   const [loading, setLoading] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
@@ -77,10 +79,16 @@ const DashboardCards = ({ userId }: { userId: string }) => {
       const newClaimedStatus = [...claimed];
       newClaimedStatus[id - 1] = true;
       setClaimed(newClaimedStatus);
+      toast({
+        title: `Congratulations! You earned ${pointsToAdd} points!`,
+        description: 'Come back tomorrow to earn more!',
+      });
       localStorage.setItem('claimedStatus', JSON.stringify(newClaimedStatus));
     } else {
       console.error('Failed to claim points');
     }
+
+
   };
 
   const followOnTwitter = () => {
