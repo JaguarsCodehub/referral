@@ -15,3 +15,4 @@ CLERK_WEBHOOK_SECRET=whsec_/147MbXFnEcS2uKYon8c9E9hSXkBOb4Y
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 # NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 # GOOGLE_REDIRECT_URI=your-google-redirect-uriW
+https://twitter.com/intent/tweet?url=https%3A%2F%2Fcatcents.io%2F%3Fref%3D${referralCode}&text=Join%20me%20at%20catcents%20&hashtags=%23catcents

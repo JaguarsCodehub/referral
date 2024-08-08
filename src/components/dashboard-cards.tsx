@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 
 const cards = [
   { id: 1, points: 500, status: 'Claim', title: 'Welcome Points' },
-  { id: 2, points: 2000, status: 'Share', title: 'Share on Twitter' },
-  { id: 3, points: 2000, status: 'Soon', title: 'COMING SOON' },
+  { id: 2, points: 400, status: 'Follow', title: 'Follow on Twitter' },
+  { id: 3, points: 600, status: 'Join', title: 'Join Discord Channel' },
   { id: 4, points: 1000, status: 'Soon', title: 'COMING SOON' },
   { id: 5, points: 4000, status: 'Soon', title: 'COMING SOON' },
   { id: 6, points: 2000, status: 'Soon', title: 'COMING SOON' },
@@ -14,12 +14,10 @@ const cards = [
 ];
 
 const DashboardCards = ({ userId }: { userId: string }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [claimed, setClaimed] = useState<boolean[]>(new Array(cards.length).fill(false));
-
   const [loading, setLoading] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
-
 
   useEffect(() => {
     // Load claimed status from local storage
@@ -38,7 +36,6 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     };
 
     checkAuth();
-
   }, []);
 
   const fetchUserData = async (userId: string) => {
@@ -86,12 +83,26 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     }
   };
 
-  const shareOnTwitter = () => {
-    // const text = encodeURIComponent(
-    //   'I just applied for the @wowBaoBaoXYZ NFT Whitelist!'
-    // );
-    const url = `I just applied for early access at @Catcentsio. Join now and grab your spot! ${referralCode}`;
+  const followOnTwitter = () => {
+    const url = `https://twitter.com/intent/follow?screen_name=CatCentsio`;
     window.open(url, '_blank');
+  };
+
+  const joinDiscord = () => {
+    const url = `https://discord.com/invite/5WWf2EJAhw`;
+    window.open(url, '_blank');
+  };
+
+  const handleAction = (card: { id: number, status: string }) => {
+    if (card.status === 'Follow') {
+      followOnTwitter();
+      handleClaim(card.id);
+    } else if (card.status === 'Join') {
+      joinDiscord();
+      handleClaim(card.id);
+    } else if (card.status === 'Claim') {
+      handleClaim(card.id);
+    }
   };
 
   return (
@@ -104,17 +115,15 @@ const DashboardCards = ({ userId }: { userId: string }) => {
           >
             <div className='text-lg mb-2'>{card.points}</div>
             <div
-              className={`px-2 py-1 rounded-full ${card.status === 'Claim' || card.status === 'Share'
+              className={`px-2 py-1 rounded-full ${card.status === 'Claim' || card.status === 'Follow' || card.status === 'Join'
                 ? claimed[card.id - 1]
                   ? 'bg-green-500'
                   : 'bg-purple-500 cursor-pointer'
                 : 'bg-gray-600'
                 } mb-2`}
               onClick={() => {
-                if (card.status === 'Claim' && !claimed[card.id - 1]) {
-                  handleClaim(card.id);
-                } else if (card.status === 'Share' && !claimed[card.id - 1]) {
-                  shareOnTwitter();
+                if (!claimed[card.id - 1]) {
+                  handleAction(card);
                 }
               }}
             >

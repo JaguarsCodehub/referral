@@ -8,6 +8,7 @@ import RunningString from '@/components/running-string';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
 import Link from 'next/link';
+import { SocialIcon } from 'react-social-icons';
 
 export const dynamic = 'force-dynamic';
 
@@ -131,6 +132,14 @@ const Dashboard = () => {
     }
   };
 
+  const shareOnTwitter = () => {
+    // const text = encodeURIComponent(
+    //   'I just applied for the @wowBaoBaoXYZ NFT Whitelist!'
+    // );
+    const url = `I just applied for early access at @Catcentsio. Join now and grab your spot! https://catcents.io/?ref=${referralCode}`;
+    window.open(url, '_blank');
+  };
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -153,6 +162,22 @@ const Dashboard = () => {
             Copy Referral Link
           </button>
           {copySuccess && <p className="text-purple-300 mt-2">{copySuccess}</p>}
+
+          <div className='flex flex-row mt-10 w-44 items-center justify-center text-white bg-zinc-800 hover:bg-zinc-900 focus:ring-4 focus:outline-none focus:ring-rose-300 font-medium rounded-md text-sm px-4 py-2 text-center'>
+            <button
+              type='button'
+              onClick={shareOnTwitter}
+              className='text-sm'
+            >
+              Share on Twitter
+            </button>
+            <SocialIcon
+              url='https://x.com'
+              style={{ width: 30, height: 30, marginRight: 8 }}
+              href='https://x.com/catcentsio'
+            />
+
+          </div>
           <p className="text-purple-300 mt-4">
             Share this link with friends and earn referral points based on their
             joining status
