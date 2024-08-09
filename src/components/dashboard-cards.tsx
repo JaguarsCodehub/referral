@@ -87,8 +87,6 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     } else {
       console.error('Failed to claim points');
     }
-
-
   };
 
   const followOnTwitter = () => {
@@ -135,7 +133,7 @@ const DashboardCards = ({ userId }: { userId: string }) => {
                 }
               }}
             >
-              {card.status === 'Claim' && claimed[card.id - 1] ? 'Claimed!' : card.status}
+              {claimed[card.id - 1] ? 'Claimed!' : card.status}
             </div>
             <div className='text-center'>{card.title}</div>
           </div>

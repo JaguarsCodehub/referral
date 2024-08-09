@@ -32,7 +32,6 @@ const Form = () => {
                     .select('*')
                     .eq('id', user.id)
                     .single();
-
                 if (userInfo && userInfo.twitter_username && userInfo.discord_username) {
                     router.push('/dashboard');
                 } else {
