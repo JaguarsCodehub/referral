@@ -7,7 +7,12 @@ const cards = [
   { id: 1, points: 500, status: 'Claim', title: 'Welcome Points' },
   { id: 2, points: 400, status: 'Follow', title: 'Follow on Twitter' },
   { id: 3, points: 600, status: 'Join', title: 'Join Discord Channel' },
-  { id: 4, points: 1000, status: 'Soon', title: 'COMING SOON' },
+  {
+    id: 4,
+    points: 300,
+    status: 'Interact with this',
+    title: 'Interact with this tweet',
+  },
   { id: 5, points: 4000, status: 'Soon', title: 'COMING SOON' },
   { id: 6, points: 2000, status: 'Soon', title: 'COMING SOON' },
   { id: 7, points: 4000, status: 'Soon', title: 'COMING SOON' },
@@ -131,8 +136,16 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     window.open(url, '_blank');
   };
 
+  const interactWithTweet = () => {
+    const url = `https://x.com/CatCentsio/status/1821495043095495112?t=gjhdIrak-L_D_YJ7aURr0w&s=19`;
+    window.open(url, '_blank');
+  };
+
   const handleAction = (card: { id: number; status: string }) => {
-    if (card.status === 'Follow') {
+    if (card.id === 4) {
+      interactWithTweet();
+      handleClaim(card.id);
+    } else if (card.status === 'Follow') {
       followOnTwitter();
       handleClaim(card.id);
     } else if (card.status === 'Join') {

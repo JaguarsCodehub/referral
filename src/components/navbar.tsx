@@ -39,7 +39,7 @@ export const Navbar = () => {
             <Image
               src={require('../../public/logo.png')}
               alt='Catcents'
-              className='w-24 h-24'
+              className='w-24 h-14'
             />
           </a>
           <div className='flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse'>

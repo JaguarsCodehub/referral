@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import { Navbar } from '@/components/navbar';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,6 +72,7 @@ const Home = () => {
   return (
     <div>
       <div className='bg-black flex h-screen items-center justify-center p-12 md:p-24'>
+        {/* <Navbar /> */}
         <Card className="w-[350px] bg-black">
           <CardHeader>
             <CardTitle className='text-white'>Welcome to Catcents</CardTitle>
