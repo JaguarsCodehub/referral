@@ -166,10 +166,11 @@ const DashboardCards = ({ userId }: { userId: string }) => {
           >
             <div className='text-lg mb-2'>{card.points}</div>
             <div
-              className={`px-2 py-1 rounded-full ${
+              className={`px-2 cursor-pointer py-1 rounded-full ${
                 card.status === 'Claim' ||
                 card.status === 'Follow' ||
-                card.status === 'Join'
+                card.status === 'Join' ||
+                card.status === 'Interact with this'
                   ? claimed[card.id - 1]
                     ? 'bg-green-500'
                     : 'bg-purple-500 cursor-pointer'
