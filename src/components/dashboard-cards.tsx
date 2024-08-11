@@ -17,23 +17,20 @@ const cards = [
 const DashboardCards = ({ userId }: { userId: string }) => {
   const router = useRouter();
   const { toast } = useToast();
-  const [claimed, setClaimed] = useState<boolean[]>(new Array(cards.length).fill(false));
+  const [claimed, setClaimed] = useState<boolean[]>(
+    new Array(cards.length).fill(false)
+  );
   const [loading, setLoading] = useState(false);
   const [referralCode, setReferralCode] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load claimed status from local storage
-    const claimedStatus = localStorage.getItem('claimedStatus');
-    if (claimedStatus) {
-      setClaimed(JSON.parse(claimedStatus));
-    }
-
     const checkAuth = async () => {
       const { data } = await supabase.auth.getSession();
       if (!data.session) {
         router.push('/');
       } else {
         fetchUserData(data.session.user.id);
+        fetchUserClaims(data.session.user.id);
       }
     };
 
@@ -59,11 +56,33 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     }
   };
 
+  const fetchUserClaims = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('user_claims')
+        .select('action_id')
+        .eq('user_id', userId)
+        .eq('claimed', true);
+
+      if (error) throw error;
+
+      const claimedActions = data.map((claim: any) => claim.action_id);
+      const newClaimedStatus = [...claimed];
+      claimedActions.forEach((actionId: number) => {
+        newClaimedStatus[actionId - 1] = true;
+      });
+
+      setClaimed(newClaimedStatus);
+    } catch (error) {
+      console.error('Error fetching user claims:', error);
+    }
+  };
+
   const handleClaim = async (id: number) => {
     if (claimed[id - 1]) return;
 
     // Add points based on card
-    const pointsToAdd = cards.find(card => card.id === id)?.points || 0;
+    const pointsToAdd = cards.find((card) => card.id === id)?.points || 0;
 
     // Update the user's points in the database
     const response = await fetch('/api/updateUserPoints', {
@@ -75,15 +94,28 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     });
 
     if (response.ok) {
-      // Update claimed status locally and in local storage
+      // Record the claim in the user_claims table
+      const { error } = await supabase.from('user_claims').insert([
+        {
+          user_id: userId,
+          action_id: id,
+          claimed: true,
+        },
+      ]);
+
+      if (error) {
+        console.error('Failed to record the claim:', error);
+        return;
+      }
+
+      // Update claimed status locally
       const newClaimedStatus = [...claimed];
       newClaimedStatus[id - 1] = true;
       setClaimed(newClaimedStatus);
       toast({
         title: `Congratulations! You earned ${pointsToAdd} points!`,
-        description: 'Come back tomorrow to earn more!',
+        description: 'You have successfully claimed this reward!',
       });
-      localStorage.setItem('claimedStatus', JSON.stringify(newClaimedStatus));
     } else {
       console.error('Failed to claim points');
     }
@@ -99,7 +131,7 @@ const DashboardCards = ({ userId }: { userId: string }) => {
     window.open(url, '_blank');
   };
 
-  const handleAction = (card: { id: number, status: string }) => {
+  const handleAction = (card: { id: number; status: string }) => {
     if (card.status === 'Follow') {
       followOnTwitter();
       handleClaim(card.id);
@@ -121,12 +153,15 @@ const DashboardCards = ({ userId }: { userId: string }) => {
           >
             <div className='text-lg mb-2'>{card.points}</div>
             <div
-              className={`px-2 py-1 rounded-full ${card.status === 'Claim' || card.status === 'Follow' || card.status === 'Join'
-                ? claimed[card.id - 1]
-                  ? 'bg-green-500'
-                  : 'bg-purple-500 cursor-pointer'
-                : 'bg-gray-600'
-                } mb-2`}
+              className={`px-2 py-1 rounded-full ${
+                card.status === 'Claim' ||
+                card.status === 'Follow' ||
+                card.status === 'Join'
+                  ? claimed[card.id - 1]
+                    ? 'bg-green-500'
+                    : 'bg-purple-500 cursor-pointer'
+                  : 'bg-gray-600'
+              } mb-2`}
               onClick={() => {
                 if (!claimed[card.id - 1]) {
                   handleAction(card);

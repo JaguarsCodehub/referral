@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 interface User {
+  id: string;
   twitter_username: string;
   points: number;
 }
@@ -15,10 +16,10 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userPoints, setUserPoints] = useState<number>(0);
+  const [userRank, setUserRank] = useState<number | null>(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const referral_code = searchParams.get('referral_code');
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,63 +36,78 @@ const Leaderboard = () => {
   }, [router]);
 
   useEffect(() => {
-    const fetchUserPoints = async () => {
+    const fetchUserPointsAndLeaderboard = async () => {
       if (userId) {
-        const { data, error } = await supabase
-          .from('user') // Ensure the table name is correct
-          .select('points')
-          .eq('id', userId);
+        try {
+          // Fetch user points
+          const { data: userPointsData, error: userPointsError } =
+            await supabase
+              .from('user')
+              .select('points')
+              .eq('id', userId)
+              .single();
 
-        if (error) {
-          console.error('Error fetching user points:', error); // Log the error
-          setError('Failed to fetch user points.');
-        } else {
-          if (data && data.length > 0) {
-            setUserPoints(data[0].points);
-          } else {
-            console.log('No points found for the user.');
+          if (userPointsError) {
+            console.error('Error fetching user points:', userPointsError);
+            setError('Failed to fetch user points.');
+            return;
           }
+
+          setUserPoints(userPointsData.points);
+
+          // Fetch leaderboard data
+          const { data: leaderboardData, error: leaderboardError } =
+            await supabase
+              .from('user')
+              .select('id, twitter_username, points')
+              .order('points', { ascending: false });
+
+          if (leaderboardError) {
+            console.error('Error fetching leaderboard:', leaderboardError);
+            setError('Failed to fetch leaderboard.');
+            return;
+          }
+
+          setUsers(leaderboardData.slice(0, 200)); // Show only top 200 users
+
+          // Determine the user's rank
+          const rank =
+            leaderboardData.findIndex((user) => user.id === userId) + 1;
+          setUserRank(rank);
+        } catch (error) {
+          console.error('Error in fetching data:', error);
+          setError('An unexpected error occurred.');
+        } finally {
+          setLoading(false);
         }
       }
     };
 
-    fetchUserPoints();
-  }, [userId]);
+    fetchUserPointsAndLeaderboard();
 
-  useEffect(() => {
-    const fetchLeaderboard = async () => {
-      const { data, error } = await supabase
-        .from('user') // Ensure the table name is correct
-        .select('twitter_username, points')
-        .order('points', { ascending: false });
-
-      if (error) {
-        setError('Failed to fetch leaderboard.');
-      } else {
-        setUsers(data);
-      }
-      setLoading(false);
-    };
-
-    fetchLeaderboard();
-
-    // Subscribe to changes in the 'users' table
+    // Subscribe to changes in the 'user' table
     const subscription = supabase
       .channel('leaderboard')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'user' }, (payload) => {
-        fetchLeaderboard(); // Refresh the leaderboard data on any change
-      })
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'user' },
+        () => {
+          fetchUserPointsAndLeaderboard(); // Refresh data on any change
+        }
+      )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(subscription); // Clean up subscription on unmount
+      supabase.removeChannel(subscription);
     };
-  }, []);
+  }, [userId]);
 
   if (loading) {
     return (
       <div className='flex items-center justify-center h-screen bg-black'>
-        <p className='text-xl font-semibold text-white'>Loading leaderboard...</p>
+        <p className='text-xl font-semibold text-white'>
+          Loading leaderboard...
+        </p>
       </div>
     );
   }
@@ -107,14 +123,14 @@ const Leaderboard = () => {
   return (
     <div className='bg-black min-h-screen'>
       <Navbar />
-      <div className='container mx-auto py-10 px-4 lg:px-8 pt-24'>
+      <div className='container mx-auto py-10 px-4 lg:px-8 pt-36'>
         <div className='text-center mb-10'>
           <h1 className='text-4xl font-bold text-white p-4 rounded-sm shadow-md inline-block'>
             <span className='font-semibold'>Leaderboard</span>
           </h1>
         </div>
-        <div className='bg-purple-600 text-white rounded-lg shadow-md overflow-x-auto'>
-          <table className='min-w-full leading-normal'>
+        <div className='bg-purple-600 text-white rounded-lg shadow-md'>
+          <table className='min-w-full leading-normal table-auto'>
             <thead>
               <tr className='bg-purple-800 text-left text-xs uppercase font-semibold'>
                 <th className='px-4 py-3 border-b border-purple-500'>Rank</th>
@@ -139,6 +155,9 @@ const Leaderboard = () => {
           <h2 className='text-3xl text-white font-semibold'>
             Your Total Points: {userPoints}
           </h2>
+          {userRank !== null && (
+            <h3 className='text-xl text-white mt-4'>Your Rank: {userRank}</h3>
+          )}
         </div>
       </div>
     </div>

@@ -65,7 +65,7 @@ const Home = () => {
   };
 
   const createReferralCode = () => {
-    return `REF-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+    return `CAT-${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
   };
 
   return (
