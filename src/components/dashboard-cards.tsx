@@ -11,7 +11,7 @@ const cards = [
     id: 4,
     points: 300,
     status: 'Interact with this',
-    title: 'Interact with this tweet',
+    title: 'Interact here',
   },
   { id: 5, points: 4000, status: 'Soon', title: 'COMING SOON' },
   { id: 6, points: 2000, status: 'Soon', title: 'COMING SOON' },
