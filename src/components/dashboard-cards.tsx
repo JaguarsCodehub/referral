@@ -137,7 +137,7 @@ const DashboardCards = ({ userId }: { userId: string }) => {
   };
 
   const interactWithTweet = () => {
-    const url = `https://x.com/CatCentsio/status/1821495043095495112?t=gjhdIrak-L_D_YJ7aURr0w&s=19`;
+    const url = `https://x.com/CatCentsio/status/1824839253379207660`;
     window.open(url, '_blank');
   };
 
