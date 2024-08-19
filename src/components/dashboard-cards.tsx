@@ -14,7 +14,7 @@ const cards = [
     title: 'Interact here',
   },
   { id: 5, points: 300, status: 'Interact with this', title: 'Interact here' },
-  { id: 6, points: 2000, status: 'Soon', title: 'COMING SOON' },
+  { id: 6, points: 300, status: 'Interact with this', title: 'Interact here' },
   { id: 7, points: 4000, status: 'Soon', title: 'COMING SOON' },
   { id: 8, points: 2000, status: 'Soon', title: 'COMING SOON' },
 ];
@@ -137,17 +137,22 @@ const DashboardCards = ({ userId }: { userId: string }) => {
   };
 
   const interactWithTweet = () => {
-    const url = `https://x.com/CatCentsio/status/1824839253379207660`;
+    const url = `https://x.com/CatCentsio/status/1821495043095495112`;
     window.open(url, '_blank');
   };
 
    const interactWithTweet1 = () => {
+    const url = `https://x.com/CatCentsio/status/1824839253379207660`;
+    window.open(url, '_blank');
+  };
+
+     const interactWithTweet1 = () => {
     const url = `https://x.com/CatCentsio/status/1823404396761186689`;
     window.open(url, '_blank');
   };
   
   const handleAction = (card: { id: number; status: string }) => {
-    if (card.id === 5) {
+    if (card.id === 6) {
       interactWithTweet();
       handleClaim(card.id);
     } else if (card.status === 'Follow') {
